@@ -223,7 +223,7 @@ export default function App() {
   const removeBudget = (category: string) => setStored(prev => ({ ...prev, budgets: prev.budgets.filter(b => b.category !== category) }))
   const exportCsv = () => {
     const rows = [['Fecha','Tipo','Descripción','Categoría','Valor','Notas'], ...filtered.map(t => [t.date, t.kind === 'income' ? 'Ingreso' : 'Gasto', t.description, t.category, String(t.amount), t.notes || ''])]
-    const csv = '\uFEFF' + rows.map(row => row.map(v => `"${v.replaceAll('"','""')}"`).join(';')).join('\r\n')
+    const csv = '\uFEFF' + rows.map(row => row.map(v => `"${v.replace(/"/g, '""')}"`).join(';')).join('\r\n')
     const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }))
     const a = document.createElement('a'); a.href = url; a.download = `movimientos-${month}.csv`; a.click(); URL.revokeObjectURL(url)
     setToast('Archivo CSV exportado.')
